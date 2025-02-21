@@ -1,0 +1,74 @@
+#include <stdio.h>
+#define queue_size 1000
+
+typedef float T;
+
+typedef struct {
+    T elements[queue_size];
+    int _size;
+    int _front;
+    int _back;
+} queue;
+
+void queueInit(queue* stk);
+void queuepush(queue* stk, T element);
+int queueempty(queue* stk);
+T queuefront(queue* stk);
+void queuepop(queue* stk);
+
+int main() {
+    float salaries[] = {50000, 40000, 48000, 23000, 2000};
+    queue stk;
+    queueInit(&stk);
+    for (int i = 0; i < 5; i++) {
+        queuepush(&stk, salaries[i]);
+    }
+    printf("salaries from queue:\n");
+    while (!queueempty(&stk)) {
+        float sal = queuefront(&stk);
+        printf("%.2f\n", sal);
+        queuepop(&stk);
+    }
+    return 0;
+}
+
+void queueInit(queue* stk) {
+    stk->_size = 0;
+    stk->_front = -1;
+    stk->_back = -1;
+}
+
+void queuepush(queue* stk, T element) {
+    if (stk->_back == queue_size - 1) {
+        printf("Queue overflow\n");
+        return;
+    }
+    stk->_back++;
+    stk->elements[stk->_back] = element;
+    stk->_size++;
+    if (stk->_front == -1) {
+        stk->_front = 0;
+    }
+}
+
+int queueempty(queue* stk) {
+    return (stk->_front == -1);
+}
+
+T queuefront(queue* stk) {
+    return stk->elements[stk->_front];
+}
+
+void queuepop(queue* stk) {
+    if (queueempty(stk)) {
+        printf("Queue is empty\n");
+        return;
+    }
+    if (stk->_front == stk->_back) {
+        stk->_front = -1;
+        stk->_back = -1;
+    } else {
+        stk->_front++;
+    }
+    stk->_size--;
+}
